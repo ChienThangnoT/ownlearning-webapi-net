@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 namespace WebAPI.Repository.Models;
 
-public partial class TblAccount
+public partial class TblAccount : IdentityUser
 {
     public int AccountId { get; set; }
 
