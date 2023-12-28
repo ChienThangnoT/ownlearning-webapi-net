@@ -5,7 +5,7 @@ namespace WebAPI.Repository.Models;
 
 public partial class TblMembership
 {
-    public int MembershipId { get; set; }
+    public string MembershipId { get; set; }
 
     public string? MembershipName { get; set; }
 

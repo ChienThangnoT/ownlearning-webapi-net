@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,10 +10,13 @@ namespace WebAPI.Repository.Interfaces
 {
     public interface IAccountRepository
     {
-        Task<List<AccountModel>> GetAllAccount();
-        public Task<AccountModel> GetById(int id);
-        public Task<AccountModel> Add(AccountModel account);
-        public Task<AccountModel> Update(AccountModel account);
-        public Task<AccountModel> Delete(int id);
+        public Task<String> SignInAccountAsync(SignInModel model);
+        public Task<ResponeModel> SignUpAccountAsync(SignUpModel model);
+
+        //Task<List<AccountModel>> GetAllAccount();
+        //public Task<AccountModel> GetById(int id);
+        //public Task<AccountModel> Add(AccountModel account);
+        //public Task<AccountModel> Update(AccountModel account);
+        //public Task<AccountModel> Delete(int id);
     }
 }

@@ -5,9 +5,9 @@ namespace WebAPI.Repository.Models;
 
 public partial class TblRegistrationCourse
 {
-    public int? CourseId { get; set; }
+    public int CourseId { get; set; }
 
-    public int? AccountId { get; set; }
+    public string AccountId { get; set; }
 
     public int RegistrationId { get; set; }
 
@@ -22,8 +22,6 @@ public partial class TblRegistrationCourse
     public bool? RegistrationStatus { get; set; }
 
     public virtual TblAccount Account { get; set; }
-
-    public virtual TblCourse Course { get; set; }
 
     public virtual TblCourseSchedule CourseSchedule { get; set; }
 

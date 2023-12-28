@@ -11,7 +11,7 @@ public partial class TblComment
 
     public DateTime? CommentDate { get; set; }
 
-    public int? AccountId { get; set; }
+    public string? AccountId { get; set; }
 
     public virtual TblAccount Account { get; set; }
 

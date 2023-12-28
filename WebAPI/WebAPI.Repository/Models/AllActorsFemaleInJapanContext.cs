@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebAPI.Repository.Models;
 
-public partial class AllActorsFemaleInJapanContext : DbContext
+public partial class AllActorsFemaleInJapanContext : IdentityDbContext<TblAccount>
 {
     public AllActorsFemaleInJapanContext()
     {
@@ -41,7 +42,6 @@ public partial class AllActorsFemaleInJapanContext : DbContext
 
     public virtual DbSet<TblRegistrationMembership> TblRegistrationMemberships { get; set; }
 
-    public virtual DbSet<TblRole> TblRoles { get; set; }
 
     //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -66,9 +66,6 @@ public partial class AllActorsFemaleInJapanContext : DbContext
             entity.Property(e => e.AccountName)
                 .HasMaxLength(30)
                 .HasColumnName("account_name");
-            entity.Property(e => e.AccountPassword)
-                .HasMaxLength(30)
-                .HasColumnName("account_password");
             entity.Property(e => e.AccountPhone)
                 .HasMaxLength(12)
                 .HasColumnName("account_phone");
@@ -80,14 +77,10 @@ public partial class AllActorsFemaleInJapanContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("date")
                 .HasColumnName("create_date");
-            entity.Property(e => e.RoleId).HasColumnName("role_id");
             entity.Property(e => e.SocialId)
                 .HasMaxLength(21)
                 .HasColumnName("social_id");
 
-            entity.HasOne(d => d.Role).WithMany(p => p.TblAccounts)
-                .HasForeignKey(d => d.RoleId)
-                .HasConstraintName("FK_tblAccount_tblRole");
         });
 
         modelBuilder.Entity<TblBill>(entity =>
@@ -278,7 +271,6 @@ public partial class AllActorsFemaleInJapanContext : DbContext
             entity.HasOne(d => d.Category).WithMany(p => p.TblCourses)
                 .HasForeignKey(d => d.CategoryId)
                 .HasConstraintName("FK_tblCourse_tblCategory");
-
             entity.HasMany(d => d.Accounts).WithMany(p => p.Courses)
                 .UsingEntity<Dictionary<string, object>>(
                     "TblCourseWishlist",
@@ -295,7 +287,7 @@ public partial class AllActorsFemaleInJapanContext : DbContext
                         j.HasKey("CourseId", "AccountId");
                         j.ToTable("tblCourseWishlist");
                         j.IndexerProperty<int>("CourseId").HasColumnName("course_id");
-                        j.IndexerProperty<int>("AccountId").HasColumnName("account_id");
+                        j.IndexerProperty<string>("AccountId").HasColumnName("account_id");
                     });
         });
 
@@ -388,9 +380,6 @@ public partial class AllActorsFemaleInJapanContext : DbContext
                 .HasForeignKey(d => d.AccountId)
                 .HasConstraintName("FK_tblRegistrationCourse_tblAccount");
 
-            entity.HasOne(d => d.Course).WithMany(p => p.TblRegistrationCourses)
-                .HasForeignKey(d => d.CourseId)
-                .HasConstraintName("FK_tblRegistrationCourse_tblCourse");
 
             entity.HasOne(d => d.CourseSchedule).WithMany(p => p.TblRegistrationCourses)
                 .HasForeignKey(d => d.CourseScheduleId)
@@ -424,19 +413,8 @@ public partial class AllActorsFemaleInJapanContext : DbContext
                 .HasConstraintName("FK_tblRegistrationMembership_tblMembership");
         });
 
-        modelBuilder.Entity<TblRole>(entity =>
-        {
-            entity.HasKey(e => e.RoleId);
-
-            entity.ToTable("tblRole");
-
-            entity.Property(e => e.RoleId).HasColumnName("role_id");
-            entity.Property(e => e.RoleName)
-                .HasMaxLength(20)
-                .HasColumnName("role_name");
-        });
-
-        OnModelCreatingPartial(modelBuilder);
+        base.OnModelCreating(modelBuilder);
+        //OnModelCreatingPartial(modelBuilder);
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
