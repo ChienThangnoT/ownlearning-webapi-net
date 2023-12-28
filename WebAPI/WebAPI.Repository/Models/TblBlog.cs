@@ -11,7 +11,7 @@ public partial class TblBlog
 
     public string? BlogDetail { get; set; }
 
-    public int? AccountId { get; set; }
+    public string? AccountId { get; set; }
 
     public DateTime? BlogDate { get; set; }
 

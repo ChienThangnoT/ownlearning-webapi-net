@@ -5,9 +5,9 @@ namespace WebAPI.Repository.Models;
 
 public partial class TblBillMembership
 {
-    public int? MembershipId { get; set; }
+    public string? MembershipId { get; set; }
 
-    public int? AccountId { get; set; }
+    public string? AccountId { get; set; }
 
     public int BillMemId { get; set; }
 

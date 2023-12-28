@@ -10,8 +10,6 @@ namespace WebAPI.Repository.Data
 
         public string? AccountName { get; set; }
 
-        public string? AccountPassword { get; set; }
-
         public string? AccountEmail { get; set; }
 
         public string? AccountPhone { get; set; }

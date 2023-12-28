@@ -7,7 +7,7 @@ public partial class TblBill
 {
     public int? CourseId { get; set; }
 
-    public int? AccountId { get; set; }
+    public string? AccountId { get; set; }
 
     public int BillId { get; set; }
 

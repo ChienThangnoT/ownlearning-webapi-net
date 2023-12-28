@@ -21,18 +21,6 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Emi Fukada", Version = "v.10.24" });
 });
 
-//config database to deploy on azure
-var connection = String.Empty;
-if (builder.Environment.IsDevelopment())
-{
-    builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
-    connection = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
-}
-else
-{
-    connection = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
-}
-
 //add cors
 builder.Services.AddCors(options =>
 {
@@ -75,14 +63,33 @@ builder.Services
     .AddEntityFrameworkStores<AllActorsFemaleInJapanContext>()
     .AddDefaultTokenProviders();
 
+//config database to deploy on azure
+var connection = String.Empty;
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
+    connection = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
+}
+else
+{
+    connection = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
+}
+
+// Config SQLAzure
+//builder.Services.AddDbContext<AllActorsFemaleInJapanContext>(options =>
+//    options.UseSqlServer(connection));
+//Config local db
 builder.Services.AddDbContext<AllActorsFemaleInJapanContext>(options =>
-    options.UseSqlServer(connection));
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("YogaCenterDB"));
+});
 
 // add automapper
 builder.Services.AddAutoMapper(typeof(AutomapperProfile).Assembly);
 
-//add DI
+//add DI, Life cycle DI: AddSingleton(), AddTransisent(), AddScoped()
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+
 
 var app = builder.Build();
 

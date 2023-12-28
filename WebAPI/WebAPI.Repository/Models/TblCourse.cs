@@ -21,7 +21,7 @@ public partial class TblCourse
 
     public bool? CourseIsActive { get; set; }
 
-    public int? AccountId { get; set; }
+    public string? AccountId { get; set; }
 
     public virtual TblAccount Account { get; set; }
 

@@ -12,7 +12,7 @@ using WebAPI.Repository.Models;
 namespace WebAPI.Repository.Migrations
 {
     [DbContext(typeof(AllActorsFemaleInJapanContext))]
-    [Migration("20231222085635_AddIdentityAuthentication")]
+    [Migration("20231228082335_AddIdentityAuthentication")]
     partial class AddIdentityAuthentication
     {
         /// <inheritdoc />
@@ -25,14 +25,147 @@ namespace WebAPI.Repository.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
             modelBuilder.Entity("TblCourseWishlist", b =>
                 {
                     b.Property<int>("CourseId")
                         .HasColumnType("int")
                         .HasColumnName("course_id");
 
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int")
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("account_id");
 
                     b.HasKey("CourseId", "AccountId");
@@ -44,12 +177,8 @@ namespace WebAPI.Repository.Migrations
 
             modelBuilder.Entity("WebAPI.Repository.Models.TblAccount", b =>
                 {
-                    b.Property<int>("AccountId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("account_id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccountId"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -58,6 +187,10 @@ namespace WebAPI.Repository.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("account_email");
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int")
+                        .HasColumnName("account_id");
 
                     b.Property<string>("AccountImg")
                         .HasMaxLength(255)
@@ -73,11 +206,6 @@ namespace WebAPI.Repository.Migrations
                         .HasColumnType("nvarchar(30)")
                         .HasColumnName("account_name");
 
-                    b.Property<string>("AccountPassword")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)")
-                        .HasColumnName("account_password");
-
                     b.Property<string>("AccountPhone")
                         .HasMaxLength(12)
                         .HasColumnType("nvarchar(12)")
@@ -90,6 +218,7 @@ namespace WebAPI.Repository.Migrations
                         .IsFixedLength();
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreateDate")
@@ -99,13 +228,11 @@ namespace WebAPI.Repository.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -114,10 +241,12 @@ namespace WebAPI.Repository.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -127,11 +256,6 @@ namespace WebAPI.Repository.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<int?>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("int")
-                        .HasColumnName("role_id");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -145,13 +269,20 @@ namespace WebAPI.Repository.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-                    b.HasKey("AccountId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
 
-                    b.ToTable("tblAccount", (string)null);
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Repository.Models.TblBill", b =>
@@ -163,9 +294,8 @@ namespace WebAPI.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BillId"));
 
-                    b.Property<int?>("AccountId")
-                        .IsRequired()
-                        .HasColumnType("int")
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("account_id");
 
                     b.Property<DateTime?>("BillDate")
@@ -227,9 +357,8 @@ namespace WebAPI.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BillMemId"));
 
-                    b.Property<int?>("AccountId")
-                        .IsRequired()
-                        .HasColumnType("int")
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("account_id");
 
                     b.Property<DateTime?>("BillDate")
@@ -252,9 +381,8 @@ namespace WebAPI.Repository.Migrations
                         .HasColumnType("decimal(10, 2)")
                         .HasColumnName("bill_value");
 
-                    b.Property<int?>("MembershipId")
-                        .IsRequired()
-                        .HasColumnType("int")
+                    b.Property<string>("MembershipId")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("membership_id");
 
                     b.Property<string>("OrderCode")
@@ -291,9 +419,8 @@ namespace WebAPI.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BlogId"));
 
-                    b.Property<int?>("AccountId")
-                        .IsRequired()
-                        .HasColumnType("int")
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("account_id");
 
                     b.Property<DateTime?>("BlogDate")
@@ -384,9 +511,8 @@ namespace WebAPI.Repository.Migrations
 
             modelBuilder.Entity("WebAPI.Repository.Models.TblComment", b =>
                 {
-                    b.Property<int?>("AccountId")
-                        .IsRequired()
-                        .HasColumnType("int")
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("account_id");
 
                     b.Property<int?>("BlogId")
@@ -420,9 +546,8 @@ namespace WebAPI.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseId"));
 
-                    b.Property<int?>("AccountId")
-                        .IsRequired()
-                        .HasColumnType("int")
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("account_id");
 
                     b.Property<int?>("CategoryId")
@@ -505,12 +630,9 @@ namespace WebAPI.Repository.Migrations
 
             modelBuilder.Entity("WebAPI.Repository.Models.TblMembership", b =>
                 {
-                    b.Property<int>("MembershipId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                    b.Property<string>("MembershipId")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("membership_id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MembershipId"));
 
                     b.Property<string>("MembershipDescription")
                         .IsRequired()
@@ -580,13 +702,12 @@ namespace WebAPI.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RegistrationId"));
 
-                    b.Property<int?>("AccountId")
+                    b.Property<string>("AccountId")
                         .IsRequired()
-                        .HasColumnType("int")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("account_id");
 
-                    b.Property<int?>("CourseId")
-                        .IsRequired()
+                    b.Property<int>("CourseId")
                         .HasColumnType("int")
                         .HasColumnName("course_id");
 
@@ -611,25 +732,28 @@ namespace WebAPI.Repository.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("registration_status");
 
+                    b.Property<int?>("TblCourseCourseId")
+                        .HasColumnType("int");
+
                     b.HasKey("RegistrationId");
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("CourseId");
-
                     b.HasIndex("CourseScheduleId");
+
+                    b.HasIndex("TblCourseCourseId");
 
                     b.ToTable("tblRegistrationCourse", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Repository.Models.TblRegistrationMembership", b =>
                 {
-                    b.Property<int>("MembershipId")
-                        .HasColumnType("int")
+                    b.Property<string>("MembershipId")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("membership_id");
 
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int")
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("account_id");
 
                     b.Property<DateTime?>("ExprirationDate")
@@ -651,23 +775,55 @@ namespace WebAPI.Repository.Migrations
                     b.ToTable("tblRegistrationMembership", (string)null);
                 });
 
-            modelBuilder.Entity("WebAPI.Repository.Models.TblRole", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.Property<int>("RoleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("role_id");
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"));
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("WebAPI.Repository.Models.TblAccount", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Property<string>("RoleName")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasColumnName("role_name");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("WebAPI.Repository.Models.TblAccount", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.HasKey("RoleId");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.ToTable("tblRole", (string)null);
+                    b.HasOne("WebAPI.Repository.Models.TblAccount", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("WebAPI.Repository.Models.TblAccount", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TblCourseWishlist", b =>
@@ -685,25 +841,11 @@ namespace WebAPI.Repository.Migrations
                         .HasConstraintName("FK_tblCourseWishlist_tblCourse");
                 });
 
-            modelBuilder.Entity("WebAPI.Repository.Models.TblAccount", b =>
-                {
-                    b.HasOne("WebAPI.Repository.Models.TblRole", "Role")
-                        .WithMany("TblAccounts")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_tblAccount_tblRole");
-
-                    b.Navigation("Role");
-                });
-
             modelBuilder.Entity("WebAPI.Repository.Models.TblBill", b =>
                 {
                     b.HasOne("WebAPI.Repository.Models.TblAccount", "Account")
                         .WithMany("TblBills")
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("FK_tblBill_tblAccount");
 
                     b.HasOne("WebAPI.Repository.Models.TblCourse", "Course")
@@ -723,15 +865,11 @@ namespace WebAPI.Repository.Migrations
                     b.HasOne("WebAPI.Repository.Models.TblAccount", "Account")
                         .WithMany("TblBillMemberships")
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("FK_tblBillMembership_tblAccount");
 
                     b.HasOne("WebAPI.Repository.Models.TblMembership", "Membership")
                         .WithMany("TblBillMemberships")
                         .HasForeignKey("MembershipId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("FK_tblBillMembership_tblMembership");
 
                     b.Navigation("Account");
@@ -744,8 +882,6 @@ namespace WebAPI.Repository.Migrations
                     b.HasOne("WebAPI.Repository.Models.TblAccount", "Account")
                         .WithMany("TblBlogs")
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("FK_tblBlog_tblAccount");
 
                     b.Navigation("Account");
@@ -768,8 +904,6 @@ namespace WebAPI.Repository.Migrations
                     b.HasOne("WebAPI.Repository.Models.TblAccount", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("FK_tblComment_tblAccount");
 
                     b.HasOne("WebAPI.Repository.Models.TblBlog", "Blog")
@@ -789,8 +923,6 @@ namespace WebAPI.Repository.Migrations
                     b.HasOne("WebAPI.Repository.Models.TblAccount", "Account")
                         .WithMany("TblCourses")
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("FK_tblCourse_tblAccount");
 
                     b.HasOne("WebAPI.Repository.Models.TblCategory", "Category")
@@ -846,13 +978,6 @@ namespace WebAPI.Repository.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_tblRegistrationCourse_tblAccount");
 
-                    b.HasOne("WebAPI.Repository.Models.TblCourse", "Course")
-                        .WithMany("TblRegistrationCourses")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_tblRegistrationCourse_tblCourse");
-
                     b.HasOne("WebAPI.Repository.Models.TblCourseSchedule", "CourseSchedule")
                         .WithMany("TblRegistrationCourses")
                         .HasForeignKey("CourseScheduleId")
@@ -860,9 +985,11 @@ namespace WebAPI.Repository.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_tblRegistrationCourse_tblCourseSchedule");
 
-                    b.Navigation("Account");
+                    b.HasOne("WebAPI.Repository.Models.TblCourse", null)
+                        .WithMany("TblRegistrationCourses")
+                        .HasForeignKey("TblCourseCourseId");
 
-                    b.Navigation("Course");
+                    b.Navigation("Account");
 
                     b.Navigation("CourseSchedule");
                 });
@@ -935,11 +1062,6 @@ namespace WebAPI.Repository.Migrations
 
                     b.Navigation("TblRatingCourse")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("WebAPI.Repository.Models.TblRole", b =>
-                {
-                    b.Navigation("TblAccounts");
                 });
 #pragma warning restore 612, 618
         }

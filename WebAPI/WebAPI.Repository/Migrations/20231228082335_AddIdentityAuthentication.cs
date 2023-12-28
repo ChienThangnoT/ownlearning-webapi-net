@@ -12,6 +12,54 @@ namespace WebAPI.Repository.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AspNetRoles",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    account_id = table.Column<int>(type: "int", nullable: false),
+                    account_img = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    account_name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    account_email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    account_phone = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
+                    account_is_active = table.Column<bool>(type: "bit", nullable: true),
+                    social_id = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: true),
+                    create_date = table.Column<DateTime>(type: "date", nullable: true, defaultValueSql: "(getdate())"),
+                    biography = table.Column<string>(type: "nchar(700)", fixedLength: true, maxLength: 700, nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "tblCategory",
                 columns: table => new
                 {
@@ -29,8 +77,7 @@ namespace WebAPI.Repository.Migrations
                 name: "tblMembership",
                 columns: table => new
                 {
-                    membership_id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    membership_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     membership_name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     membership_duration = table.Column<int>(type: "int", nullable: true),
                     membership_price = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
@@ -44,92 +91,108 @@ namespace WebAPI.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "tblRole",
+                name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    role_id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    role_name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true)
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tblRole", x => x.role_id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "tblAccount",
-                columns: table => new
-                {
-                    account_id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    account_img = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    account_name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    account_password = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    account_email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    account_phone = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
-                    account_is_active = table.Column<bool>(type: "bit", nullable: true),
-                    role_id = table.Column<int>(type: "int", nullable: false),
-                    social_id = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: true),
-                    create_date = table.Column<DateTime>(type: "date", nullable: true, defaultValueSql: "(getdate())"),
-                    biography = table.Column<string>(type: "nchar(700)", fixedLength: true, maxLength: 700, nullable: true),
-                    Id = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_tblAccount", x => x.account_id);
+                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_tblAccount_tblRole",
-                        column: x => x.role_id,
-                        principalTable: "tblRole",
-                        principalColumn: "role_id",
+                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "tblBillMembership",
+                name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    bill_mem_id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    membership_id = table.Column<int>(type: "int", nullable: false),
-                    account_id = table.Column<int>(type: "int", nullable: false),
-                    bill_status = table.Column<int>(type: "int", nullable: true),
-                    bill_is_active = table.Column<bool>(type: "bit", nullable: true),
-                    bill_value = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    bill_discount = table.Column<int>(type: "int", nullable: true),
-                    bill_date = table.Column<DateTime>(type: "datetime", nullable: true),
-                    order_code = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    payment_method = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    payment_date = table.Column<DateTime>(type: "datetime", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tblBillMembership", x => x.bill_mem_id);
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_tblBillMembership_tblAccount",
-                        column: x => x.account_id,
-                        principalTable: "tblAccount",
-                        principalColumn: "account_id",
+                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_tblBillMembership_tblMembership",
-                        column: x => x.membership_id,
-                        principalTable: "tblMembership",
-                        principalColumn: "membership_id",
+                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -141,7 +204,7 @@ namespace WebAPI.Repository.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     blog_title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     blog_detail = table.Column<string>(type: "nvarchar(3000)", maxLength: 3000, nullable: true),
-                    account_id = table.Column<int>(type: "int", nullable: false),
+                    account_id = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     blog_date = table.Column<DateTime>(type: "datetime", nullable: true),
                     blog_img = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true)
                 },
@@ -151,9 +214,8 @@ namespace WebAPI.Repository.Migrations
                     table.ForeignKey(
                         name: "FK_tblBlog_tblAccount",
                         column: x => x.account_id,
-                        principalTable: "tblAccount",
-                        principalColumn: "account_id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -169,7 +231,7 @@ namespace WebAPI.Repository.Migrations
                     category_id = table.Column<int>(type: "int", nullable: false),
                     course_price = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
                     course_is_active = table.Column<bool>(type: "bit", nullable: true),
-                    account_id = table.Column<int>(type: "int", nullable: false)
+                    account_id = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -177,9 +239,8 @@ namespace WebAPI.Repository.Migrations
                     table.ForeignKey(
                         name: "FK_tblCourse_tblAccount",
                         column: x => x.account_id,
-                        principalTable: "tblAccount",
-                        principalColumn: "account_id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_tblCourse_tblCategory",
                         column: x => x.category_id,
@@ -189,11 +250,43 @@ namespace WebAPI.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "tblBillMembership",
+                columns: table => new
+                {
+                    bill_mem_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    membership_id = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    account_id = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    bill_status = table.Column<int>(type: "int", nullable: true),
+                    bill_is_active = table.Column<bool>(type: "bit", nullable: true),
+                    bill_value = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
+                    bill_discount = table.Column<int>(type: "int", nullable: true),
+                    bill_date = table.Column<DateTime>(type: "datetime", nullable: true),
+                    order_code = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    payment_method = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    payment_date = table.Column<DateTime>(type: "datetime", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblBillMembership", x => x.bill_mem_id);
+                    table.ForeignKey(
+                        name: "FK_tblBillMembership_tblAccount",
+                        column: x => x.account_id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_tblBillMembership_tblMembership",
+                        column: x => x.membership_id,
+                        principalTable: "tblMembership",
+                        principalColumn: "membership_id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "tblRegistrationMembership",
                 columns: table => new
                 {
-                    membership_id = table.Column<int>(type: "int", nullable: false),
-                    account_id = table.Column<int>(type: "int", nullable: false),
+                    membership_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    account_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     registration_date = table.Column<DateTime>(type: "datetime", nullable: true),
                     expriration_date = table.Column<DateTime>(type: "datetime", nullable: true),
                     registration_status = table.Column<bool>(type: "bit", nullable: true)
@@ -204,8 +297,8 @@ namespace WebAPI.Repository.Migrations
                     table.ForeignKey(
                         name: "FK_tblRegistrationMembership_tblAccount",
                         column: x => x.account_id,
-                        principalTable: "tblAccount",
-                        principalColumn: "account_id");
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_tblRegistrationMembership_tblMembership",
                         column: x => x.membership_id,
@@ -220,16 +313,15 @@ namespace WebAPI.Repository.Migrations
                     blog_id = table.Column<int>(type: "int", nullable: false),
                     comment_content = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     comment_date = table.Column<DateTime>(type: "datetime", nullable: true),
-                    account_id = table.Column<int>(type: "int", nullable: false)
+                    account_id = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.ForeignKey(
                         name: "FK_tblComment_tblAccount",
                         column: x => x.account_id,
-                        principalTable: "tblAccount",
-                        principalColumn: "account_id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_tblComment_tblBlog",
                         column: x => x.blog_id,
@@ -245,7 +337,7 @@ namespace WebAPI.Repository.Migrations
                     bill_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     course_id = table.Column<int>(type: "int", nullable: false),
-                    account_id = table.Column<int>(type: "int", nullable: false),
+                    account_id = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     bill_status = table.Column<int>(type: "int", nullable: true),
                     bill_is_active = table.Column<bool>(type: "bit", nullable: true),
                     bill_value = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
@@ -261,9 +353,8 @@ namespace WebAPI.Repository.Migrations
                     table.ForeignKey(
                         name: "FK_tblBill_tblAccount",
                         column: x => x.account_id,
-                        principalTable: "tblAccount",
-                        principalColumn: "account_id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_tblBill_tblCourse",
                         column: x => x.course_id,
@@ -300,7 +391,7 @@ namespace WebAPI.Repository.Migrations
                 columns: table => new
                 {
                     course_id = table.Column<int>(type: "int", nullable: false),
-                    account_id = table.Column<int>(type: "int", nullable: false)
+                    account_id = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -308,8 +399,8 @@ namespace WebAPI.Repository.Migrations
                     table.ForeignKey(
                         name: "FK_tblCourseWishlist_tblAccount",
                         column: x => x.account_id,
-                        principalTable: "tblAccount",
-                        principalColumn: "account_id");
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_tblCourseWishlist_tblCourse",
                         column: x => x.course_id,
@@ -324,12 +415,13 @@ namespace WebAPI.Repository.Migrations
                     registration_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     course_id = table.Column<int>(type: "int", nullable: false),
-                    account_id = table.Column<int>(type: "int", nullable: false),
+                    account_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     registration_date = table.Column<DateTime>(type: "datetime", nullable: true),
                     end_date = table.Column<DateTime>(type: "datetime", nullable: true),
                     course_status = table.Column<int>(type: "int", nullable: true),
                     course_schedule_id = table.Column<int>(type: "int", nullable: false),
-                    registration_status = table.Column<bool>(type: "bit", nullable: true)
+                    registration_status = table.Column<bool>(type: "bit", nullable: true),
+                    TblCourseCourseId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -337,14 +429,8 @@ namespace WebAPI.Repository.Migrations
                     table.ForeignKey(
                         name: "FK_tblRegistrationCourse_tblAccount",
                         column: x => x.account_id,
-                        principalTable: "tblAccount",
-                        principalColumn: "account_id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_tblRegistrationCourse_tblCourse",
-                        column: x => x.course_id,
-                        principalTable: "tblCourse",
-                        principalColumn: "course_id",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_tblRegistrationCourse_tblCourseSchedule",
@@ -352,6 +438,11 @@ namespace WebAPI.Repository.Migrations
                         principalTable: "tblCourseSchedule",
                         principalColumn: "course_schedule_id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_tblRegistrationCourse_tblCourse_TblCourseCourseId",
+                        column: x => x.TblCourseCourseId,
+                        principalTable: "tblCourse",
+                        principalColumn: "course_id");
                 });
 
             migrationBuilder.CreateTable(
@@ -403,9 +494,43 @@ namespace WebAPI.Repository.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_tblAccount_role_id",
-                table: "tblAccount",
-                column: "role_id");
+                name: "IX_AspNetRoleClaims_RoleId",
+                table: "AspNetRoleClaims",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "NormalizedName",
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserClaims_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserLogins_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_RoleId",
+                table: "AspNetUserRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "AspNetUsers",
+                column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "AspNetUsers",
+                column: "NormalizedUserName",
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_tblBill_account_id",
@@ -478,14 +603,14 @@ namespace WebAPI.Repository.Migrations
                 column: "account_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tblRegistrationCourse_course_id",
-                table: "tblRegistrationCourse",
-                column: "course_id");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_tblRegistrationCourse_course_schedule_id",
                 table: "tblRegistrationCourse",
                 column: "course_schedule_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tblRegistrationCourse_TblCourseCourseId",
+                table: "tblRegistrationCourse",
+                column: "TblCourseCourseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_tblRegistrationMembership_account_id",
@@ -496,6 +621,21 @@ namespace WebAPI.Repository.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AspNetRoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserLogins");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserTokens");
+
             migrationBuilder.DropTable(
                 name: "tblBill");
 
@@ -518,6 +658,9 @@ namespace WebAPI.Repository.Migrations
                 name: "tblRegistrationMembership");
 
             migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
                 name: "tblBlog");
 
             migrationBuilder.DropTable(
@@ -533,13 +676,10 @@ namespace WebAPI.Repository.Migrations
                 name: "tblCourse");
 
             migrationBuilder.DropTable(
-                name: "tblAccount");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "tblCategory");
-
-            migrationBuilder.DropTable(
-                name: "tblRole");
         }
     }
 }
